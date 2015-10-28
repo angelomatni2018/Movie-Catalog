@@ -27,15 +27,14 @@ class TableSeeder {
 		if (!$result)
 			die($conn->error);
 		
-		$columns = [];
-		$column_types = [];
+		$column_info = [];
 		for ($i = 0; $i < $result->num_rows; ++$i) {
 			$result->data_seek($i);
 			$row = $result->fetch_array(MYSQLI_ASSOC);
 			
 			// Combine these two arrays into a multi-dim one
-			$columns[$i] = $row['COLUMN_NAME']; 
-			$column_types[$i] = $row['DATA_TYPE'];
+			$column_info[$i] = ['COLUMN_NAME' => $row['COLUMN_NAME'], 
+								'DATA_TYPE' => $row['DATA_TYPE']];
 		}
 		
 		$insert_query = "INSERT INTO " .$table." ";
@@ -45,19 +44,20 @@ class TableSeeder {
 		$insert_query = substr($insert_query, 0, -1); */
 		$insert_query .= "VALUES (";
 		
-		return [$insert_query, $column_types];
+		return [$insert_query, $column_info];
 	}
 	
-	public function seedRow($insert_query, $column_types) {
-		for ($i = 0; $i < count($column_types); ++$i) {
-			if ($column_types[$i] == 'varchar') 
+	public function seedRow($insert_query, $column_info) {
+		for ($i = 0; $i < count($column_info); ++$i) {
+			if ($column_info[$i]['DATA_TYPE'] == 'varchar') 
 				$insert_query .= "'".$this->createRandomString(rand(5,8))."',";
-			else
+			else if ($column_info[$i]['DATA_TYPE'] == 'int')
 				$insert_query .= "DEFAULT,";
 		}
 		$insert_query = substr($insert_query, 0, -1);
 		$insert_query .= ")";
 		
+		echo $insert_query;
 		$result = $this->conn->query($insert_query);
 	}
 	

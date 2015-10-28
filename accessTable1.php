@@ -20,7 +20,7 @@
 	$pass = "";
 	$db = "movie_collection"; */
 
-	$table = "test1";
+	$table = "users";
 
 	$connection = new mysqli($host, $user, $pass, $db);
 	if ($connection->connect_error)
