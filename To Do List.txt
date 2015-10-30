@@ -1,0 +1,11 @@
+To Do:
+
+Column multi-dim array within seeder
+Make seeder more robust
+
+play around with form-handling, string sanitizing
+
+Push sql structure (without data) to git
+
+
+
